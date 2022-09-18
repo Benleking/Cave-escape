@@ -6,14 +6,14 @@ public class MainCamera : MonoBehaviour
 {
     [SerializeField]
     private Transform _target;
-    private float smoothTime = 0.3f;
-    private Vector3 velocity = Vector3.zero;
+    private Vector3 _offset = new Vector3(0, 0, -5);
 
     private void FixedUpdate()
     {
+        
         Vector3 goalPos = _target.position;
         goalPos.y = transform.position.y;
-        transform.position = Vector3.SmoothDamp(transform.position, goalPos, ref velocity, smoothTime);
+        transform.position = goalPos + _offset;
     }
 
 }

@@ -18,7 +18,7 @@ public class Obstacles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CanThePlayerDestroyMe();
+        
     }
 
     private void AmIARockorARoot()
@@ -35,13 +35,5 @@ public class Obstacles : MonoBehaviour
         }
     }
 
-    private void CanThePlayerDestroyMe()
-    {
-        /*
-         * Find the player
-         * Measure distance
-         * check player tools
-         * check if pressed "use" and if under a certain distance
-         */
-    }
+  
 }
