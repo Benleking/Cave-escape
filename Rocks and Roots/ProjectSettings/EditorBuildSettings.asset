@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Olivier/Scene/Start.unity
+    guid: 99edd1076c6fea044b1927af2c98170b
+  - enabled: 1
+    path: Assets/Olivier/Scene/Level_1.unity
+    guid: 7b2044fd48052d54e812fcc85f1e78e9
+  - enabled: 1
+    path: Assets/Olivier/Scene/Level_2.unity
+    guid: 76cc7521cffd5d74aad9774bab64006b
+  - enabled: 1
+    path: Assets/Olivier/Scene/Level_3.unity
+    guid: 2bf9c5c45608d2f43bbf36ee9ac68432
+  - enabled: 1
+    path: Assets/Olivier/Scene/Retry.unity
+    guid: c6b3d09163d521043862a3b96a28949a
+  - enabled: 1
+    path: Assets/Olivier/Scene/End.unity
+    guid: 0325e665127e2ec408f9d098cf791566
   m_configObjects: {}

@@ -6454,8 +6454,8 @@ Camera:
   m_GameObject: {fileID: 646769966}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -9228,8 +9228,8 @@ Transform:
   - {fileID: 154467541}
   - {fileID: 1925483864}
   - {fileID: 40534831}
-  - {fileID: 1172388312}
   - {fileID: 208037691}
+  - {fileID: 1172388312}
   - {fileID: 1724729513}
   - {fileID: 93978076}
   - {fileID: 838722514}
@@ -9254,13 +9254,13 @@ Transform:
   - {fileID: 1711917058}
   - {fileID: 16800596}
   - {fileID: 1933880594}
+  - {fileID: 734881998}
   - {fileID: 496285198}
   - {fileID: 1933739408}
   - {fileID: 1564868213}
+  - {fileID: 107288987}
   - {fileID: 487487001}
   - {fileID: 1440185840}
-  - {fileID: 107288987}
-  - {fileID: 734881998}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
