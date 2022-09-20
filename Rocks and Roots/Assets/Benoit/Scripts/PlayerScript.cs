@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private GameObject _AxeInHand;
     private bool _hasPickaxeRightNow;
+    [Header("UI Settings")]
+    [SerializeField]
+    private Image _breakIconImage;
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +62,6 @@ public class PlayerScript : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
         }
     }
-
     private void WhatIsTheTarget()
     {
         RaycastHit hit;
@@ -78,7 +81,6 @@ public class PlayerScript : MonoBehaviour
             _target = null;
         }
     }
-
     private void Initialization()
     {
         controller = gameObject.GetComponent<CharacterController>();
@@ -119,16 +121,22 @@ public class PlayerScript : MonoBehaviour
                 {
                     StartCoroutine(PerformingAction());
                 }
-
         }
-   
+        
+        if ((_target == null) || ((_target.tag == "Rocks") && !_hasPickaxeRightNow) || ((_target.tag == "Roots") && _hasPickaxeRightNow))
+        {
+            _breakIconImage.color = new Color(1f, 1f, 1f, 0.3f);
+        } else
+        {
+            _breakIconImage.color = new Color(1f, 1f, 1f, 1f);
+        }
     }
 
     IEnumerator PerformingAction()
     {
         _canMove = false;
         animator.SetBool("isMining", true);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2.8f);
         animator.SetBool("isMining", false);
         _target.SetActive(false);
         _canMove = true;
