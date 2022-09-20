@@ -14,6 +14,7 @@ public class MainCamera : MonoBehaviour
         Vector3 goalPos = _target.position;
         goalPos.y = transform.position.y;
         transform.position = goalPos + _offset;
+        transform.LookAt(_target);
     }
 
 }

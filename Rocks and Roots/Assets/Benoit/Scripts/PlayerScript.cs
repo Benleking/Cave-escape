@@ -1,33 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 playerVelocity;
-    private bool _playerIsMining;
-    private bool _playerIsCutting;
     private float playerSpeed = 2.0f;
-    private float _actionCooldown = 1f;
+    public GameObject _target;
     private Animator animator;
-    private bool _canMove;
-    
+    private bool _canMove = true;
+    [SerializeField]
+    private float _longueurDuBras = 2f;
+    [Header("Tools Settings")]
+    [SerializeField]
+    private GameObject _pickaxeIcon;
+    [SerializeField]
+    private GameObject _AxeIcon;
+    [SerializeField]
+    private GameObject _pickaxeInHand;
+    [SerializeField]
+    private GameObject _AxeInHand;
+    private bool _hasPickaxeRightNow;
+
     // Start is called before the first frame update
     void Start()
     {
-        controller = gameObject.GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        Initialization();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       SwapTool();
+       DestroyObstacle();
     }
     private void FixedUpdate()
     {
         ManageMovement();
+        WhatIsTheTarget();
     }
 
     private void ManageMovement()
@@ -45,5 +57,80 @@ public class PlayerScript : MonoBehaviour
         }
         controller.Move(playerVelocity * Time.deltaTime);
         }
+    }
+
+    private void WhatIsTheTarget()
+    {
+        RaycastHit hit;
+        Ray forwardaBit = new Ray(transform.position, transform.forward);
+       
+
+        Debug.DrawRay(transform.position, transform.forward * _longueurDuBras);
+
+        if (Physics.Raycast(forwardaBit, out hit, _longueurDuBras))
+            {
+            if (hit.collider.tag == "Rocks" || hit.collider.tag == "Roots")
+            {
+                _target = hit.transform.gameObject;
+            } 
+        } else
+        {
+            _target = null;
+        }
+    }
+
+    private void Initialization()
+    {
+        controller = gameObject.GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        _pickaxeIcon.SetActive(true);
+        _AxeIcon.SetActive(false);
+        _pickaxeInHand.SetActive(true);
+        _AxeInHand.SetActive(false);
+        _hasPickaxeRightNow = true;
+    }
+    private void SwapTool()
+    {
+      if ((Input.GetKeyDown(KeyCode.Q)) && (_hasPickaxeRightNow))
+        {
+            _pickaxeIcon.SetActive(false);
+            _AxeIcon.SetActive(true);
+            _pickaxeInHand.SetActive(false);
+            _AxeInHand.SetActive(true);
+            _hasPickaxeRightNow = false;
+        } else if ((Input.GetKeyDown(KeyCode.Q)) && (!_hasPickaxeRightNow))
+        {
+            _pickaxeIcon.SetActive(true);
+            _AxeIcon.SetActive(false);
+            _pickaxeInHand.SetActive(true);
+            _AxeInHand.SetActive(false);
+            _hasPickaxeRightNow = true;
+        }
+    }
+
+    private void DestroyObstacle()
+    {   
+        if ((_target != null) && (Input.GetKeyDown(KeyCode.E)) && (_canMove))
+        {
+            if ((_target.tag == "Rocks") && _hasPickaxeRightNow)
+            {
+                StartCoroutine(PerformingAction());
+            }else if ((_target.tag == "Roots") && !_hasPickaxeRightNow)
+                {
+                    StartCoroutine(PerformingAction());
+                }
+
+        }
+   
+    }
+
+    IEnumerator PerformingAction()
+    {
+        _canMove = false;
+        animator.SetBool("isMining", true);
+        yield return new WaitForSeconds(3);
+        animator.SetBool("isMining", false);
+        _target.SetActive(false);
+        _canMove = true;
     }
 }
