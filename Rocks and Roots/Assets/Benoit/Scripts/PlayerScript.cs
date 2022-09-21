@@ -16,14 +16,8 @@ public class PlayerScript : MonoBehaviour
     private float _longueurDuBras = 2f;
     [Header("Tools Settings")]
     [SerializeField]
-    private GameObject _pickaxeIcon;
-    [SerializeField]
-    private GameObject _AxeIcon;
-    [SerializeField]
-    private GameObject _pickaxeInHand;
-    [SerializeField]
-    private GameObject _AxeInHand;
-    private bool _hasPickaxeRightNow;
+    private Tool[] toolList = new Tool[2];
+    private int activeToolIndex;
     [Header("UI Settings")]
     [SerializeField]
     private Image _breakIconImage;
@@ -38,7 +32,7 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
        SwapTool();
-       DestroyObstacle();
+       UseTool();
     }
     private void FixedUpdate()
     {
@@ -85,33 +79,29 @@ public class PlayerScript : MonoBehaviour
     {
         controller = gameObject.GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        _pickaxeIcon.SetActive(true);
-        _AxeIcon.SetActive(false);
-        _pickaxeInHand.SetActive(true);
-        _AxeInHand.SetActive(false);
-        _hasPickaxeRightNow = true;
+        activeToolIndex = 0;
     }
     private void SwapTool()
     {
-      if ((Input.GetKeyDown(KeyCode.Q)) && (_hasPickaxeRightNow))
+      if ((Input.GetKeyDown(KeyCode.Q)))
         {
-            _pickaxeIcon.SetActive(false);
-            _AxeIcon.SetActive(true);
-            _pickaxeInHand.SetActive(false);
-            _AxeInHand.SetActive(true);
-            _hasPickaxeRightNow = false;
-        } else if ((Input.GetKeyDown(KeyCode.Q)) && (!_hasPickaxeRightNow))
-        {
-            _pickaxeIcon.SetActive(true);
-            _AxeIcon.SetActive(false);
-            _pickaxeInHand.SetActive(true);
-            _AxeInHand.SetActive(false);
-            _hasPickaxeRightNow = true;
+            toolList[activeToolIndex].OnDeselection();
+            activeToolIndex++;//0,1,2
+            if(activeToolIndex >= toolList.Length)
+            {
+                activeToolIndex = 0;
+            }
+            toolList[activeToolIndex].OnSelection();
         }
     }
 
-    private void DestroyObstacle()
-    {   
+    private void UseTool()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            toolList[activeToolIndex].OnUse();
+        }
+        /*
         if ((_target != null) && (Input.GetKeyDown(KeyCode.E)) && (_canMove))
         {
             if ((_target.tag == "Rocks") && _hasPickaxeRightNow)
@@ -129,7 +119,7 @@ public class PlayerScript : MonoBehaviour
         } else
         {
             _breakIconImage.color = new Color(1f, 1f, 1f, 1f);
-        }
+        }*/
     }
 
     IEnumerator PerformingAction()
