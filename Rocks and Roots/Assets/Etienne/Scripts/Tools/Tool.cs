@@ -6,6 +6,8 @@ public abstract class Tool : MonoBehaviour
 {
     public GameObject ToolIcon;
     public GameObject ToolModel;
+    [SerializeField] protected Animator animator;
+    public int Damage;
 
     public abstract void OnUse();
 

@@ -8,7 +8,7 @@ public class PlayerScript : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 playerVelocity;
-    private float playerSpeed = 2.0f;
+    [SerializeField] private float playerSpeed = 2.0f;
     public GameObject _target;
     private Animator animator;
     private bool _canMove = true;
@@ -80,6 +80,7 @@ public class PlayerScript : MonoBehaviour
         controller = gameObject.GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         activeToolIndex = 0;
+        toolList[activeToolIndex].OnSelection();
     }
     private void SwapTool()
     {
@@ -97,38 +98,84 @@ public class PlayerScript : MonoBehaviour
 
     private void UseTool()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && _canMove)
         {
-            toolList[activeToolIndex].OnUse();
+           toolList[activeToolIndex].OnUse();
+           StartCoroutine(PerformingAction());
         }
-        /*
-        if ((_target != null) && (Input.GetKeyDown(KeyCode.E)) && (_canMove))
-        {
-            if ((_target.tag == "Rocks") && _hasPickaxeRightNow)
-            {
-                StartCoroutine(PerformingAction());
-            }else if ((_target.tag == "Roots") && !_hasPickaxeRightNow)
-                {
-                    StartCoroutine(PerformingAction());
-                }
-        }
-        
-        if ((_target == null) || ((_target.tag == "Rocks") && !_hasPickaxeRightNow) || ((_target.tag == "Roots") && _hasPickaxeRightNow))
-        {
-            _breakIconImage.color = new Color(1f, 1f, 1f, 0.3f);
-        } else
-        {
-            _breakIconImage.color = new Color(1f, 1f, 1f, 1f);
-        }*/
     }
 
     IEnumerator PerformingAction()
     {
         _canMove = false;
-        animator.SetBool("isMining", true);
-        yield return new WaitForSeconds(2.8f);
-        animator.SetBool("isMining", false);
-        _target.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
         _canMove = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        ExitCondition ec = other.GetComponent<ExitCondition>();
+        if(ec != null)
+        {
+            ec.OnPlayerEnter(this);
+        }
+
+        Trap trap = other.GetComponent<Trap>();
+        if (trap != null)
+        {
+            trap.OnPlayerEnter(this);
+        }
+        /*
+        Gold gold = other.GetComponent<Gold>();
+        if(gold != null)
+        {
+            gold.OnPlayerPickup(this);
+        }*/
+    }
+
+    public void Slowdown(float multiplier)
+    {
+        StartCoroutine(SlowEffect(multiplier));
+    }
+
+    private IEnumerator SlowEffect(float multiplier)
+    {
+        playerSpeed *= multiplier;
+        yield return new WaitForSeconds(2f);
+        playerSpeed /= multiplier;
+    }
+
+    public void Bounce(Vector3 vector, float duration)
+    {
+        StartCoroutine(BounceEffect(vector,duration));
+    }
+
+    private IEnumerator BounceEffect(Vector3 vector, float duration)
+    {
+        _canMove = false;
+        float timer = 0f;
+        while(timer <= duration)
+        {
+            controller.Move(vector * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _canMove = true;
+    }
+
+    public void Defeated()
+    {
+        Toolbox.GetInstance().GetUIManager().RetryOverlay.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        Time.timeScale = 0;
+    }
+
+    public void Victorious()
+    {
+        Toolbox.GetInstance().GetUIManager().WinOverlay.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        Time.timeScale = 0;
     }
 }
