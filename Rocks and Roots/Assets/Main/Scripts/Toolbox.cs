@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Toolbox : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class Toolbox : MonoBehaviour
             DontDestroyOnLoad(go);
         }
         return instance;
+    }
+
+    public void Unload()
+    {
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
     }
 
     //Managers

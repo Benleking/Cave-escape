@@ -7,32 +7,52 @@ using UnityEngine.UI;
 public class PlayerScript : MonoBehaviour
 {
     private CharacterController controller;
-    private Vector3 playerVelocity;
     [SerializeField] private float playerSpeed = 2.0f;
-    public GameObject _target;
+    public GameObject Target;
     private Animator animator;
-    private bool _canMove = true;
+    private bool canMove = true;
     [SerializeField]
-    private float _longueurDuBras = 2f;
+    private float armLength = 2f;
     [Header("Tools Settings")]
     [SerializeField]
     private Tool[] toolList = new Tool[2];
     private int activeToolIndex;
     [Header("UI Settings")]
     [SerializeField]
-    private Image _breakIconImage;
+    private Image breakIconImage;
+
+    public float GetSpeed()
+    {
+        return playerSpeed;
+    }
+
+    public void SetSpeed(float value)
+    {
+        playerSpeed = value;
+    }
+
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+    }
+
+    public CharacterController GetCharacterController()
+    {
+        return controller;
+    }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Initialization();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
        SwapTool();
        UseTool();
+       CheckForPause();
     }
     private void FixedUpdate()
     {
@@ -40,20 +60,23 @@ public class PlayerScript : MonoBehaviour
         WhatIsTheTarget();
     }
 
+
     private void ManageMovement()
     {
-        if (_canMove) { 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        controller.Move(move * Time.deltaTime * playerSpeed);
-        if (move != Vector3.zero)
-        {
-            gameObject.transform.forward = move;
-            animator.SetBool("isMoving", true);
-        }else
-        {
-            animator.SetBool("isMoving", false);
-        }
-        controller.Move(playerVelocity * Time.deltaTime);
+        if (canMove) 
+        { 
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            controller.Move(move.normalized * Time.deltaTime * playerSpeed);
+
+            if (move != Vector3.zero)
+            {
+                gameObject.transform.forward = move;
+                animator.SetBool("isMoving", true);
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
         }
     }
     private void WhatIsTheTarget()
@@ -62,17 +85,17 @@ public class PlayerScript : MonoBehaviour
         Ray forwardaBit = new Ray(transform.position, transform.forward);
        
 
-        Debug.DrawRay(transform.position, transform.forward * _longueurDuBras);
+        Debug.DrawRay(transform.position, transform.forward * armLength);
 
-        if (Physics.Raycast(forwardaBit, out hit, _longueurDuBras))
+        if (Physics.Raycast(forwardaBit, out hit, armLength))
             {
             if (hit.collider.tag == "Rocks" || hit.collider.tag == "Roots")
             {
-                _target = hit.transform.gameObject;
+                Target = hit.transform.gameObject;
             } 
         } else
         {
-            _target = null;
+            Target = null;
         }
     }
     private void Initialization()
@@ -98,18 +121,26 @@ public class PlayerScript : MonoBehaviour
 
     private void UseTool()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _canMove)
+        if (Input.GetKeyDown(KeyCode.E) && canMove)
         {
            toolList[activeToolIndex].OnUse();
            StartCoroutine(PerformingAction());
         }
     }
 
+    private void CheckForPause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Toolbox.GetInstance().GetLevelManager().PauseLevel();
+        } 
+    }
+
     IEnumerator PerformingAction()
     {
-        _canMove = false;
+        canMove = false;
         yield return new WaitForSeconds(0.5f);
-        _canMove = true;
+        canMove = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -125,57 +156,21 @@ public class PlayerScript : MonoBehaviour
         {
             trap.OnPlayerEnter(this);
         }
-        /*
+        
         Gold gold = other.GetComponent<Gold>();
         if(gold != null)
         {
-            gold.OnPlayerPickup(this);
-        }*/
-    }
-
-    public void Slowdown(float multiplier)
-    {
-        StartCoroutine(SlowEffect(multiplier));
-    }
-
-    private IEnumerator SlowEffect(float multiplier)
-    {
-        playerSpeed *= multiplier;
-        yield return new WaitForSeconds(2f);
-        playerSpeed /= multiplier;
-    }
-
-    public void Bounce(Vector3 vector, float duration)
-    {
-        StartCoroutine(BounceEffect(vector,duration));
-    }
-
-    private IEnumerator BounceEffect(Vector3 vector, float duration)
-    {
-        _canMove = false;
-        float timer = 0f;
-        while(timer <= duration)
-        {
-            controller.Move(vector * Time.deltaTime);
-            timer += Time.deltaTime;
-            yield return null;
+            Toolbox.GetInstance().GetLevelManager().AddScore(gold.GetValue());
         }
-        _canMove = true;
     }
 
     public void Defeated()
     {
-        Toolbox.GetInstance().GetUIManager().RetryOverlay.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
-        Time.timeScale = 0;
+        Toolbox.GetInstance().GetLevelManager().LoseLevel();
     }
 
     public void Victorious()
     {
-        Toolbox.GetInstance().GetUIManager().WinOverlay.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
-        Time.timeScale = 0;
+        Toolbox.GetInstance().GetLevelManager().WinLevel();
     }
 }

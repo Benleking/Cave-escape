@@ -23,14 +23,4 @@ public class PickAxe : Tool
     {
         animator.Play("PickAxeSwing");
     }
-    public override void OnSelection()
-    {
-        base.OnSelection();
-    }
-
-    public override void OnDeselection()
-    {
-        base.OnDeselection();
-    }
-
 }

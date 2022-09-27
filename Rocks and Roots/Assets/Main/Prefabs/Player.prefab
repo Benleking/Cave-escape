@@ -67,9 +67,9 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_Radius: 0.7
+  m_SlopeLimit: 0
+  m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
@@ -86,12 +86,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 5
-  _target: {fileID: 0}
-  _longueurDuBras: 2
+  Target: {fileID: 0}
+  armLength: 2
   toolList:
   - {fileID: 3457870238417778516}
   - {fileID: 8008281277907310872}
-  _breakIconImage: {fileID: 0}
+  breakIconImage: {fileID: 0}
 --- !u!1001 &476658009666586231
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -99,6 +99,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6635829865141351309}
     m_Modifications:
+    - target: {fileID: 4781872233085326278, guid: 0ce6f9ecf0d7a54429a41a9f724dc2ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5300409011923895090, guid: 0ce6f9ecf0d7a54429a41a9f724dc2ef, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -251,6 +255,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3190219345873508720, guid: dfedee3c73eb4414898e3056ca8330d5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994870392130954341, guid: dfedee3c73eb4414898e3056ca8330d5, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}

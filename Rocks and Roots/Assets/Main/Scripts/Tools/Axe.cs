@@ -25,14 +25,4 @@ public class Axe : Tool
         animator.Play("AxeSwing");
     }
 
-    public override void OnSelection()
-    {
-        base.OnSelection();
-    }
-
-    public override void OnDeselection()
-    {
-        base.OnDeselection();
-    }
-
 }

@@ -7,7 +7,7 @@ public class CaveIn : ExitCondition
     [SerializeField] private float speed;
     private void Update()
     {
-        transform.Translate(transform.forward * speed * Time.deltaTime);
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
     public override void OnPlayerEnter(PlayerScript player)
     {
