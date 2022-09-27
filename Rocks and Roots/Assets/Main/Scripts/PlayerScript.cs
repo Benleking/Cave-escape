@@ -22,11 +22,13 @@ public class PlayerScript : MonoBehaviour
     private Image breakIconImage;
     [Header("Audio Settings")]
     [SerializeField]
-    public AudioClip AxeSound;
-    public AudioClip PickAxeSound;
-    public AudioClip CoinSound;
-
-    public AudioSource audioSource;
+    private AudioClip AxeSound;
+    [SerializeField]
+    private AudioClip PickAxeSound;
+    [SerializeField]
+    private AudioClip CoinSound;
+    [SerializeField]
+    private AudioSource audioSource;
 
     public float GetSpeed()
     {
