@@ -8,25 +8,15 @@ public class PlayerScript : MonoBehaviour
 {
     private CharacterController controller;
     [SerializeField] private float playerSpeed = 2.0f;
-    public GameObject Target;
     private Animator animator;
     private bool canMove = true;
-    [SerializeField]
-    private float armLength = 2f;
     [Header("Tools Settings")]
     [SerializeField]
     private Tool[] toolList = new Tool[2];
     private int activeToolIndex;
-    [Header("UI Settings")]
-    [SerializeField]
-    private Image breakIconImage;
     [Header("Audio Settings")]
     [SerializeField]
-    private AudioClip AxeSound;
-    [SerializeField]
-    private AudioClip PickAxeSound;
-    [SerializeField]
-    private AudioClip CoinSound;
+    private AudioClip goldPickupClip;
     [SerializeField]
     private AudioSource audioSource;
 
@@ -62,13 +52,8 @@ public class PlayerScript : MonoBehaviour
        SwapTool();
        UseTool();
        CheckForPause();
+       ManageMovement();
     }
-    private void FixedUpdate()
-    {
-        ManageMovement();
-        WhatIsTheTarget();
-    }
-
 
     private void ManageMovement()
     {
@@ -88,25 +73,6 @@ public class PlayerScript : MonoBehaviour
             }
         }
     }
-    private void WhatIsTheTarget()
-    {
-        RaycastHit hit;
-        Ray forwardaBit = new Ray(transform.position, transform.forward);
-       
-
-        Debug.DrawRay(transform.position, transform.forward * armLength);
-
-        if (Physics.Raycast(forwardaBit, out hit, armLength))
-            {
-            if (hit.collider.tag == "Rocks" || hit.collider.tag == "Roots")
-            {
-                Target = hit.transform.gameObject;
-            } 
-        } else
-        {
-            Target = null;
-        }
-    }
     private void Initialization()
     {
         controller = gameObject.GetComponent<CharacterController>();
@@ -116,7 +82,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void SwapTool()
     {
-      if ((Input.GetKeyDown(KeyCode.Q)))
+      if (Input.GetKeyDown(KeyCode.Q) && canMove)
         {
             toolList[activeToolIndex].OnDeselection();
             activeToolIndex++;//0,1,2
@@ -148,19 +114,8 @@ public class PlayerScript : MonoBehaviour
     IEnumerator PerformingAction()
     {
         canMove = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.65f);
         canMove = true;
-
-        if (activeToolIndex == 0)
-        {
-            audioSource.clip = PickAxeSound;
-            audioSource.Play();
-        }
-        if (activeToolIndex == 1)
-        {
-            audioSource.clip = AxeSound;
-            audioSource.Play();
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -181,7 +136,7 @@ public class PlayerScript : MonoBehaviour
         if(gold != null)
         {
             Toolbox.GetInstance().GetLevelManager().AddScore(gold.GetValue());
-            audioSource.clip = CoinSound;
+            audioSource.clip = goldPickupClip;
             audioSource.Play();
         }
     }

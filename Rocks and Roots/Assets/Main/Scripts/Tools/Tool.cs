@@ -6,6 +6,7 @@ public abstract class Tool : MonoBehaviour
 {
     public GameObject ToolIcon;
     public GameObject ToolModel;
+    [SerializeField] protected AudioSource toolSound;
     [SerializeField] protected Animator animator;
     public int Damage;
 

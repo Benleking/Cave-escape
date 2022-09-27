@@ -87,15 +87,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 5
-  Target: {fileID: 0}
-  armLength: 2
   toolList:
   - {fileID: 3457870238417778516}
   - {fileID: 8008281277907310872}
-  breakIconImage: {fileID: 0}
-  AxeSound: {fileID: 8300000, guid: b4135730c7845e14baf858863522b050, type: 3}
-  PickAxeSound: {fileID: 8300000, guid: 9752e742258d5f049a29f102c87dcde2, type: 3}
-  CoinSound: {fileID: 8300000, guid: 153c60688e52f7b4f9fd9a088f7c16a8, type: 3}
+  goldPickupClip: {fileID: 8300000, guid: 153c60688e52f7b4f9fd9a088f7c16a8, type: 3}
   audioSource: {fileID: 433578375796608505}
 --- !u!82 &433578375796608505
 AudioSource:

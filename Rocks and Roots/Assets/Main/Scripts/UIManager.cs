@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject retryOverlay;
     [SerializeField] private GameObject winOverlay;
     [SerializeField] private GameObject pauseOverlay;
+    [SerializeField] private GameObject endOverlay;
     public GameObject PickAxeIcon;
     public GameObject AxeIcon;
 
@@ -14,6 +15,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreTMP;
 
 
+    [SerializeField] private TextMeshProUGUI totalTimerTMP;
+    [SerializeField] private TextMeshProUGUI totalScoreTMP;
+    [SerializeField] private TextMeshProUGUI totalRetriesTMP;
 
     //WinOverlay
     public void ShowWinOverlay(bool value)
@@ -43,6 +47,26 @@ public class UIManager : MonoBehaviour
     public void ContinueButton()
     {
         Toolbox.GetInstance().GetLevelManager().ResumeLevel();
+    }
+
+    //EndOverlay
+    public void ShowEndOverlay(bool value)
+    {
+        endOverlay.SetActive(value);
+    }
+    public void SetTotalScoreText(int value)
+    {
+        totalScoreTMP.text = "Total Score : " + value.ToString();
+    }
+
+    public void SetTotalTimerText(int value)
+    {
+        totalTimerTMP.text = "Total Timer : " + value.ToString() + " seconds";
+    }
+
+    public void SetTotalRetriesText(int value)
+    {
+        totalRetriesTMP.text = "Total Retries : " + value.ToString();
     }
 
 

@@ -84,9 +84,17 @@ public class LevelManager : MonoBehaviour
 
     public void NextLevel()
     {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         Toolbox.GetInstance().GetUIManager().ShowWinOverlay(false);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
-        StartLevel();
+        SceneManager.LoadScene(nextSceneIndex);
+        if(SceneManager.GetSceneByBuildIndex(nextSceneIndex).name != "End")
+        {
+            StartLevel();
+        }
+        else
+        {
+            EndGame();
+        }
     }
 
     public void LoseLevel()
@@ -105,13 +113,17 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void EndGame()
+    {
+        Toolbox.GetInstance().GetUIManager().ShowEndOverlay(true);
+
+        Toolbox.GetInstance().GetUIManager().SetTotalScoreText(totalScore);
+        Toolbox.GetInstance().GetUIManager().SetTotalTimerText((int)totalTimer);
+        Toolbox.GetInstance().GetUIManager().SetTotalRetriesText(totalRetries);
+    }
+
     public void QuitLevel()
     {
-        Toolbox.GetInstance().GetUIManager().ShowRetryOverlay(false);
-        Toolbox.GetInstance().GetUIManager().ShowWinOverlay(false);
-        Toolbox.GetInstance().GetUIManager().ShowPauseOverlay(false);
-        Toolbox.GetInstance().GetUIManager().ShowHud(false);
-
         Toolbox.GetInstance().Unload();
 
         SceneManager.LoadScene(0);

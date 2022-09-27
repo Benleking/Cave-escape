@@ -15,6 +15,7 @@ public class PickAxe : Tool
 
         if (rock != null)
         {
+            toolSound.Play();
             rock.OnToolHit(this);
         }
     }

@@ -16,7 +16,7 @@ public class MainCamera : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         
         Vector3 goalPos = target.position;

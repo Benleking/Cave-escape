@@ -15,6 +15,7 @@ public class Axe : Tool
 
         if (root != null)
         {
+            toolSound.Play();
             root.OnToolHit(this);
         }
     }

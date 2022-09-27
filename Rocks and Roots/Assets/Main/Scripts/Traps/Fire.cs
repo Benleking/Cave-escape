@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Fire : Trap
 {
-    [SerializeField] private float distance;
+    [SerializeField] private float speed;
     [SerializeField] private float duration;
     public override void OnPlayerEnter(PlayerScript player)
     {
@@ -19,7 +19,7 @@ public class Fire : Trap
         float timer = 0f;
         while (timer <= duration)
         {
-            player.GetCharacterController().Move(vector.normalized * distance * Time.deltaTime);
+            player.GetCharacterController().Move(vector.normalized * speed * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
         }
