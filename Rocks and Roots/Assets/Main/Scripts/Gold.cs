@@ -6,7 +6,6 @@ public class Gold : MonoBehaviour
 {
     [SerializeField] private int value;
 
-
     private void OnTriggerEnter(Collider other)
     {
         PlayerScript player = other.GetComponent<PlayerScript>();

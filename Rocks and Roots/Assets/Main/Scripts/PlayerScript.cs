@@ -20,6 +20,13 @@ public class PlayerScript : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField]
     private Image breakIconImage;
+    [Header("Audio Settings")]
+    [SerializeField]
+    public AudioClip AxeSound;
+    public AudioClip PickAxeSound;
+    public AudioClip CoinSound;
+
+    public AudioSource audioSource;
 
     public float GetSpeed()
     {
@@ -141,6 +148,17 @@ public class PlayerScript : MonoBehaviour
         canMove = false;
         yield return new WaitForSeconds(0.5f);
         canMove = true;
+
+        if (activeToolIndex == 0)
+        {
+            audioSource.clip = PickAxeSound;
+            audioSource.Play();
+        }
+        if (activeToolIndex == 1)
+        {
+            audioSource.clip = AxeSound;
+            audioSource.Play();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -161,6 +179,8 @@ public class PlayerScript : MonoBehaviour
         if(gold != null)
         {
             Toolbox.GetInstance().GetLevelManager().AddScore(gold.GetValue());
+            audioSource.clip = CoinSound;
+            audioSource.Play();
         }
     }
 
